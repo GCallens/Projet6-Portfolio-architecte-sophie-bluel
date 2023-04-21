@@ -3,6 +3,24 @@
 // ETAPE 1.1 : RECUPERATION DES TRAVAUX DEPUIS LE BACK-END //
 
 // Fonction pour recuperer les travaux provenant du back-end //
+//<a href="loginPage.html">login</a>//
+const token = localStorage.getItem("token")
+const connectionButton = document.querySelector(".connectionButton")
+if (token) {
+    const logoutButton = document.createElement("a")
+    logoutButton.href = "index.html"
+    logoutButton.innerHTML = "logout"
+    const logout = () => {
+        localStorage.removeItem("token")
+    }
+    logoutButton.addEventListener("click", logout);
+    connectionButton.appendChild(logoutButton)
+} else {
+    const loginButton = document.createElement("a")
+    loginButton.href = "loginPage.html"
+    loginButton.innerHTML = "login"
+    connectionButton.appendChild(loginButton)
+}
 async function fetchWorks(categoryId) {
     console.log("**********************")
     console.log(categoryId)

@@ -102,6 +102,7 @@ nav li {
 
 .loginWeight {
     font-weight: 600;
+    cursor: pointer;
 }
 
 li:hover {
