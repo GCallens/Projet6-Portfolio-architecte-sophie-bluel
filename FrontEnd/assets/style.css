@@ -62,6 +62,11 @@ section {
 	margin: 50px 0
 }
 
+a {
+    text-decoration: none;
+    color: black;
+}
+
 h1{
 	display: flex;
 	flex-direction: column;
@@ -93,6 +98,10 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+}
+
+.loginWeight {
+    font-weight: 600;
 }
 
 li:hover {
@@ -150,6 +159,21 @@ li:hover {
     padding: 5px 14px 5px 14px;
 }
 
+.logInButton {
+    font-family: 'Syne';
+    font-weight: 700;
+    color: white;
+    background-color: #1D6154;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: #1D6154 solid 1px;
+    border-radius: 20px;
+    margin: 0 20px 0 0;
+    padding: 10px 40px 10px 40px;
+    margin : 2em auto ;
+}
+
 .active {
     color: white;
     background-color: #1D6154;
@@ -167,34 +191,42 @@ li:hover {
 	width: 100%;
 
 }
-#contact {
+#contact, #logIn {
 	width: 50%;
-margin: auto;
+    margin: auto;
 }
-#contact > * {
+
+#contact, #logIn > * {
 	text-align: center;
 
 }
-#contact h2{
+
+#contact h2 {
 	margin-bottom: 20px;
 }
-#contact form {
+
+#logIn h2 {
+    margin-bottom: 20px;
+    margin-top: 150px;
+}
+
+#contact form, #logIn form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+#contact input, #logIn input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label, #logIn label {
 	margin: 2em 0 1em 0;
 }
-#contact textarea {
+#contact textarea, #logIn textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
@@ -208,6 +240,10 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+}
+
+.forgetPassword {
+    text-decoration: underline;
 }
 
 footer nav ul {
