@@ -3,24 +3,7 @@
 // ETAPE 1.1 : RECUPERATION DES TRAVAUX DEPUIS LE BACK-END //
 
 // Fonction pour recuperer les travaux provenant du back-end //
-//<a href="loginPage.html">login</a>//
-const token = localStorage.getItem("token")
-const connectionButton = document.querySelector(".connectionButton")
-if (token) {
-    const logoutButton = document.createElement("a")
-    logoutButton.href = "index.html"
-    logoutButton.innerHTML = "logout"
-    const logout = () => {
-        localStorage.removeItem("token")
-    }
-    logoutButton.addEventListener("click", logout);
-    connectionButton.appendChild(logoutButton)
-} else {
-    const loginButton = document.createElement("a")
-    loginButton.href = "loginPage.html"
-    loginButton.innerHTML = "login"
-    connectionButton.appendChild(loginButton)
-}
+
 async function fetchWorks(categoryId) {
     console.log("**********************")
     console.log(categoryId)
@@ -116,15 +99,7 @@ function createMenu(categories, works) {
 
 
     // Creation des boutons //
-    /*console.log(categories)
-    categories.push({
-        id : 0,
-        name : "Tous",
-    })
-    categories.sort(
-        (p1, p2) =>
-            (p2.id < p1.id) ? 1 : (p2.id > p1.id) ? -1 : 0);
-    console.log(categories)*/
+
     for (let i = 0; i < categories.length; i++) {
         let buttonElement = document.createElement("button");
         buttonElement.innerText = categories[i].name;
@@ -150,3 +125,71 @@ function createMenu(categories, works) {
 
 
         // Affichage des boutons filtres dans le menu //
+
+
+
+
+
+// ÉTAPE 2 : CODER LA PAGE DE CONNEXION //
+
+// ETAPE 2.2 : AUTHENTIFICATION DE L'UTILISATEUR //
+
+// BOUTON LOGIN/LOGOUT DYNAMIQUE //
+
+const token = localStorage.getItem("token")
+
+const connectionButton = document.querySelector(".connectionButton")
+
+const editHeader = document.querySelector(".editHeader")
+
+if (token) {
+
+    // LOGOUT BUTTON //
+
+    const logoutButton = document.createElement("a")
+    logoutButton.href = "index.html"
+    logoutButton.innerHTML = "logout"
+    logoutButton.classList.add("connectionButton")
+    const logout = () => {
+        localStorage.removeItem("token")
+    }
+    logoutButton.addEventListener("click", logout);
+    connectionButton.appendChild(logoutButton)
+
+    // MODE EDITION DE L'UTILISATEUR //
+
+    const editMode = document.createElement("div")
+    editMode.classList.add("edit")
+    editHeader.appendChild(editMode)
+
+    const editContent = document.createElement("div")
+    editContent.classList.add("editContent")
+    editMode.appendChild(editContent)
+
+    const editIcone = document.createElement("i")
+    editIcone.classList = "fa-sharp iconeWhiteHeader fa-regular fa-pen-to-square"
+    editContent.appendChild(editIcone)
+
+    const editModeEdition = document.createElement("p")
+    editModeEdition.innerHTML = "Mode édition"
+    editModeEdition.classList.add("editModeEdition")
+    editContent.appendChild(editModeEdition)
+
+    const editPublishChange = document.createElement("button")
+    editPublishChange.innerText = "publier les changements"
+    editPublishChange.classList.add("editPublishChange")
+    editContent.appendChild(editPublishChange)
+
+
+} else {
+
+    // LOGIN BUTTON //
+
+    const loginButton = document.createElement("a")
+    loginButton.href = "loginPage.html"
+    loginButton.innerHTML = "login"
+    loginButton.classList.add("connectionButton")
+    connectionButton.appendChild(loginButton)
+}
+
+// ************** //

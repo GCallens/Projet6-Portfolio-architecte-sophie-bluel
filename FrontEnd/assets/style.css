@@ -89,6 +89,42 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
+.edit {
+    background-color: black;
+    width: 100%;
+    max-height: 59px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.editContent {
+    width: 31%;
+    height: 59px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+i {
+    color: white;
+    font-size: 16px;
+}
+
+.editModeEdition {
+    color: white;
+}
+
+.editPublishChange {
+    background: #FFFFFF;
+    font-family: "Work Sans";
+    border-radius: 60px;
+    padding: 11px 23px 11px 23px;
+    border: none;
+}
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -99,14 +135,16 @@ nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
-
 .loginWeight {
     font-weight: 600;
     cursor: pointer;
 }
-
 li:hover {
 	color: #B1663C;
+}
+
+.connectionButton:hover {
+    color: #B1663C;
 }
 #introduction {
 	display: flex;
