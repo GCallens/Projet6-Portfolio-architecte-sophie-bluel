@@ -23,8 +23,8 @@ form.addEventListener("submit", function(event) {
         body: body
 })
         .then(response => {
-            return response.json()
             alert("Connexion réussie");
+            return response.json()
 
 })
         .then(data => {

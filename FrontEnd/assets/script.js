@@ -22,6 +22,7 @@ async function fetchWorks(categoryId) {
     }
     console.log(filteredWorks)
     createGallery(filteredWorks);
+    createModalWorks(filteredWorks)
 }
 // Fonction pour ajouter dans la galerie les travaux recuperes //
 function createGallery(works) {
@@ -58,20 +59,8 @@ async function fetchCategories() {
 fetchCategories().then(categories => console.log(categories));
 
 
-/*
-const selectCategory = () => {
-    buttonAll.classList.add("active");
-    document.querySelector(".gallery").innerText = "";
-    fetchWorks().then(works => console.log(works));
-    document.querySelectorAll("button").forEach(function (btn) {
-        btn.classList.remove("active");
-        buttonAll.classList.add("active");
-    });
-}
-*/
-
 // Fonction pour ajouter des filtres //
-function createMenu(categories, works) {
+function createMenu(categories) {
     // Creation du menu
      const menu = document.querySelector('.menu');
 
@@ -129,7 +118,6 @@ function createMenu(categories, works) {
 
 
 
-
 // ÉTAPE 2 : CODER LA PAGE DE CONNEXION //
 
 // ETAPE 2.2 : AUTHENTIFICATION DE L'UTILISATEUR //
@@ -141,6 +129,12 @@ const token = localStorage.getItem("token")
 const connectionButton = document.querySelector(".connectionButton")
 
 const editHeader = document.querySelector(".editHeader")
+
+const editPhoto = document.querySelector(".editPhoto")
+
+const editProject = document.querySelector(".editProject")
+
+const filterNone = document.querySelector(".menu");
 
 if (token) {
 
@@ -157,6 +151,8 @@ if (token) {
     connectionButton.appendChild(logoutButton)
 
     // MODE EDITION DE L'UTILISATEUR //
+
+    // Edit Header //
 
     const editMode = document.createElement("div")
     editMode.classList.add("edit")
@@ -179,6 +175,127 @@ if (token) {
     editPublishChange.innerText = "publier les changements"
     editPublishChange.classList.add("editPublishChange")
     editContent.appendChild(editPublishChange)
+
+    // Edit Photo //
+
+    const editModePhoto = document.createElement("div")
+    editModePhoto.classList.add("editModePhoto")
+    editPhoto.appendChild(editModePhoto)
+
+    const editIconePhoto = document.createElement("i")
+    editIconePhoto.classList = "fa-sharp fa-regular fa-pen-to-square"
+    editModePhoto.appendChild(editIconePhoto)
+
+    const editModifier = document.createElement("button")
+    editModifier.innerText = "modifier"
+    editModifier.classList.add("editModifier")
+    editModePhoto.appendChild(editModifier)
+
+    // Edit Project //
+
+    const editModeProject = document.createElement("div")
+    editModeProject.classList.add("editModeProject")
+    editProject.appendChild(editModeProject)
+
+    const editIconeProject = document.createElement("i")
+    editIconeProject.classList = "fa-sharp fa-regular fa-pen-to-square"
+    editModeProject.appendChild(editIconeProject)
+
+    const editModifierProject = document.createElement("button")
+    editModifierProject.innerText = "modifier"
+    editModifierProject.classList.add("editModifier")
+    editModifierProject.setAttribute('id', 'buttonModifierModal')
+    editModifierProject.setAttribute('href', '#modal1')
+    editModifierProject.setAttribute('id', 'buttonModifierModal')
+    editModifierProject.setAttribute('class', 'jsModal')
+    editModeProject.appendChild(editModifierProject)
+
+    // Remove Filter //
+
+    filterNone.style.display = "none"
+
+    // ******************* //
+
+    // ETAPE 3 : AJOUTER LA MODALE //
+
+    // ETAPE 3.1 : AJOUT DE LA FENETRE MODALE //
+
+    // MODALE 1 //
+
+    let modal = null
+
+    const openModal = function (e) {
+        e.preventDefault()
+        const target = document.querySelector(e.target.getAttribute('href'))
+        target.className = "activeModal"
+        target.removeAttribute('aria-hidden')
+        target.setAttribute('aria-modal', true)
+        modal = target
+        modal.addEventListener('click', closeModal)
+        modal.querySelector('.jsModalClose').addEventListener('click', closeModal)
+        modal.querySelector('.jsModalStop').addEventListener('click', stopPropagation)
+    }
+
+    const closeModal = function (e) {
+        if (modal === null) return
+        e.preventDefault()
+        modal.className = "modal"
+        modal.setAttribute('aria-hidden', 'true')
+        modal.removeAttribute('aria-modal')
+        modal.removeEventListener('click', closeModal)
+        modal.querySelector('.jsModalClose').removeEventListener('click', closeModal)
+        modal.querySelector('.jsModalStop').removeEventListener('click', stopPropagation)
+        modal = null
+    }
+
+    const stopPropagation = function (e) {
+        e.stopPropagation()
+    }
+
+    document.querySelectorAll('.jsModal').forEach(a => {
+        a.addEventListener('click', openModal)
+    })
+
+    window.addEventListener('keydown', function (e) {
+        if (e.key === "Escape" || e.key === "Esc") {
+            closeModal(e)
+        }
+    })
+
+    // AFFICHER LES PROJETS DANS LA MODALE //
+
+    function createModalWorks (works) {
+        for (let i = 0; i < works.length; i++) {
+            let figureElement = document.createElement("figure");
+            let imageElement = document.createElement("img");
+            imageElement.src = works[i].imageUrl;
+            imageElement.id = works[i].id;
+            // icone //
+            const trashIcon = document.createElement("i");
+            trashIcon.classList.add("fa-solid", "fa-trash", "iconModal", "trash");
+            const moveArrowIcon = document.createElement("i");
+            moveArrowIcon.classList.add("fa-solid", "fa-arrows-up-down-left-right", "iconModal", "arrow");
+            let figcaptionElement = document.createElement("figcaption");
+            figcaptionElement.innerText = "éditer";
+            // Mettre les éléments dans le HTML //
+            document.querySelector(".modalGallery").appendChild(figureElement);
+            figureElement.appendChild(imageElement);
+            figureElement.appendChild(figcaptionElement);
+            figureElement.appendChild(trashIcon);
+            figureElement.appendChild(moveArrowIcon);
+        }
+    }
+
+    // ******************** //
+
+
+    // MODALE 2 //
+
+
+
+
+
+
 
 
 } else {

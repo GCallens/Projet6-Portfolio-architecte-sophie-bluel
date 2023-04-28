@@ -28,6 +28,8 @@
 	<section id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">
+            <div class="editPhoto">
+            </div>
 		</figure>
 		<article>
 			<h2>Designer d'espace</h2>
@@ -36,8 +38,54 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
+
+    <aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal">
+        <div class="modalWrapper jsModalStop">
+            <i class="fa-solid fa-xmark closeModalIcon jsModalClose"></i>
+            <h3 class="titleModal">Galerie photo</h3>
+            <div class="modalGallery"></div>
+            <div class="lineModal"></div>
+            <button id="addButton">Ajouter une photo</button>
+            <button id="deleteButton">Supprimer la galerie</button>
+        </div>
+    </aside>
+
+    <aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal" style="display: none">
+        <div class="modalWrapper2">
+            <div class="backAndCloseModalIcon">
+                <i class="fa-solid fa-arrow-left jsModalBack"></i>
+                <i class="fa-solid fa-xmark jsModalClose"></i>
+            </div>
+            <h3 class="titleModal">Ajout photo</h3>
+            <div id="addPhotoModal">
+                <label class="sendImage" for="bouton-search"><i class="fa-solid fa-image"></i></label>
+                <label class="sendImage" for="bouton-search" id="bouton-add">+ Ajouter photo
+                    <input type="file" id="bouton-search" accept="image/jpeg,image/png,image/jpg">
+                </label>
+                <label class="sendImage" id="subtitle-image">jpg.png : 4mo max</label>
+                <div id="imagePreview"></div>
+            </div>
+            <form>
+                <label>Titre</label>
+                <input type="text" id="title-image">
+                <label>Catégorie</label>
+                <select id="objet">
+                    <option value="1">Objets</option>
+                    <option value="2">Appartements</option>
+                    <option value="3">Hôtels & restaurants</option>
+                </select>
+            </form>
+            <div class="lineModal"></div>
+            <button id="bouton-valider" type="submit">Valider</button>
+            <div id="add-image-error"></div>
+        </div>
+    </aside>
+
+
 	<section id="portfolio">
 		<h2>Mes Projets</h2>
+        <div class="editProject">
+        </div>
         <div class="menu">
         </div>
 		<div class="gallery">
