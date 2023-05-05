@@ -39,48 +39,53 @@
 		</article>
 	</section>
 
-    <aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal">
-        <div class="modalWrapper jsModalStop">
-            <i class="fa-solid fa-xmark closeModalIcon jsModalClose"></i>
-            <h3 class="titleModal">Galerie photo</h3>
-            <div class="modalGallery"></div>
-            <div class="lineModal"></div>
-            <button id="addButton">Ajouter une photo</button>
-            <button id="deleteButton">Supprimer la galerie</button>
-        </div>
-    </aside>
+    <!-- Fenêtre modale -->
 
-    <aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal" style="display: none">
-        <div class="modalWrapper2">
-            <div class="backAndCloseModalIcon">
-                <i class="fa-solid fa-arrow-left jsModalBack"></i>
-                <i class="fa-solid fa-xmark jsModalClose"></i>
-            </div>
-            <h3 class="titleModal">Ajout photo</h3>
-            <div id="addPhotoModal">
-                <label class="sendImage" for="bouton-search"><i class="fa-solid fa-image"></i></label>
-                <label class="sendImage" for="bouton-search" id="bouton-add">+ Ajouter photo
-                    <input type="file" id="bouton-search" accept="image/jpeg,image/png,image/jpg">
-                </label>
-                <label class="sendImage" id="subtitle-image">jpg.png : 4mo max</label>
-                <div id="imagePreview"></div>
-            </div>
-            <form>
-                <label>Titre</label>
-                <input type="text" id="title-image">
-                <label>Catégorie</label>
-                <select id="objet">
-                    <option value="1">Objets</option>
-                    <option value="2">Appartements</option>
-                    <option value="3">Hôtels & restaurants</option>
-                </select>
-            </form>
-            <div class="lineModal"></div>
-            <button id="bouton-valider" type="submit">Valider</button>
-            <div id="add-image-error"></div>
-        </div>
-    </aside>
+    <section id="allModal">
+        <div class="modal">
+            <aside id="icons">
+                <i class="fa-solid fa-arrow-left arrowBack"></i>
+                <i class="fa-solid fa-xmark closeModalIcon"></i>
+            </aside>
 
+            <!--Première modale pour supprimer les photos-->
+            <aside id="modal1">
+                <h3 class="titleModal">Galerie photo</h3>
+                <div class="modalGallery"></div>
+                <div class="lineModal"></div>
+                <button id="addButton">Ajouter une photo</button>
+                <button id="deleteButton">Supprimer la galerie</button>
+            </aside>
+
+            <!--Deuxième modale pour ajouter les photos-->
+            <aside id="modal2">
+                <h3 class="titleModal">Ajout photo</h3>
+                <div id="addPhotoModal">
+                    <label class="sendPhoto" for="searchButton"><i class="fa-solid fa-image"></i></label>
+                    <label class="sendPhoto" for="searchButton" id="addButtonImage">+ Ajouter photo
+                        <input type="file" id="searchButton" accept="image/jpeg,image/png,image/jpg">
+                    </label>
+                    <label class="sendPhoto" id="commentaryImage">jpg.png : 4mo max</label>
+                    <div id="imageOverview"></div>
+                </div>
+                <form id="imageModalForm">
+                    <label>Titre</label>
+                    <input type="text" id="imageTitle">
+                    <label>Catégorie</label>
+                    <select id="category">
+                        <option value="1">Objets</option>
+                        <option value="2">Appartements</option>
+                        <option value="3">Hôtels & restaurants</option>
+                    </select>
+                </form>
+                <div class="lineModal"></div>
+                <button id="validateButton" type="submit">Valider</button>
+                <div id="errorImage"></div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- Fin Modale -->
 
 	<section id="portfolio">
 		<h2>Mes Projets</h2>

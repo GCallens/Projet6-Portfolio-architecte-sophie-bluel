@@ -17,23 +17,20 @@ form.addEventListener("submit", function(event) {
 
     fetch("http://localhost:5678/api/users/login", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-},
+        headers: { "Content-Type": "application/json" },
         body: body
-})
+    })
         .then(response => {
             alert("Connexion réussie");
             return response.json()
-
-})
+        })
         .then(data => {
             console.log(data)
             localStorage.setItem("token", data.token)
             window.location.href = "../FrontEnd/index.html"
-})
+        })
         .catch(error => {
             console.error("Error:", error);
             alert("Erreur dans l’identifiant ou le mot de passe");
-});
+        });
 });

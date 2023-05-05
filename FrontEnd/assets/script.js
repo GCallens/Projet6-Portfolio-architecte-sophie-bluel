@@ -220,33 +220,27 @@ if (token) {
 
     // ETAPE 3.1 : AJOUT DE LA FENETRE MODALE //
 
-    // MODALE 1 //
-
-    let modal = null
-
+    // OUVRIR LA MODALE 1 //
     const openModal = function (e) {
-        e.preventDefault()
-        const target = document.querySelector(e.target.getAttribute('href'))
-        target.className = "activeModal"
-        target.removeAttribute('aria-hidden')
-        target.setAttribute('aria-modal', true)
-        modal = target
-        modal.addEventListener('click', closeModal)
-        modal.querySelector('.jsModalClose').addEventListener('click', closeModal)
-        modal.querySelector('.jsModalStop').addEventListener('click', stopPropagation)
-    }
+        e.preventDefault();
+        modal = document.getElementById("allModal");
+        modal.style.display = "flex"
+        modal.addEventListener("click", closeModal);
+        modal.querySelector(".closeModalIcon").addEventListener("click", closeModal);
+        modal.querySelector(".modal").addEventListener("click", stopPropagation);
+    };
 
+    // FERMER LA MODALE 1 //
     const closeModal = function (e) {
-        if (modal === null) return
-        e.preventDefault()
-        modal.className = "modal"
-        modal.setAttribute('aria-hidden', 'true')
-        modal.removeAttribute('aria-modal')
-        modal.removeEventListener('click', closeModal)
-        modal.querySelector('.jsModalClose').removeEventListener('click', closeModal)
-        modal.querySelector('.jsModalStop').removeEventListener('click', stopPropagation)
-        modal = null
-    }
+        e.preventDefault();
+        modal.style.display = "none";
+        modal.removeEventListener("click", closeModal);
+        modal.querySelector(".closeModalIcon").removeEventListener("click", closeModal);
+        modal.querySelector(".modal").removeEventListener("click", stopPropagation);
+        resetImage();
+    };
+
+    // Stopper la propagation //
 
     const stopPropagation = function (e) {
         e.stopPropagation()
@@ -263,7 +257,6 @@ if (token) {
     })
 
     // AFFICHER LES PROJETS DANS LA MODALE //
-
     function createModalWorks (works) {
         for (let i = 0; i < works.length; i++) {
             let figureElement = document.createElement("figure");
@@ -286,10 +279,165 @@ if (token) {
         }
     }
 
+    // SWITCH SUR LA MODALE 2 //
+
+    const addButtonPhoto = document.getElementById("addButton");
+    addButtonPhoto.addEventListener("click", function () {
+        changeModal(true);
+    });
+
+    const backArrowModal = document.querySelector(".arrowBack");
+    backArrowModal.addEventListener("click", function() {
+        changeModal(false);
+        resetImage();
+    });
+
+    function changeModal(view) {
+        const modal1 = document.getElementById("modal1");
+        const modal2 = document.getElementById("modal2");
+        if (view) {
+            modal2.style.display = "flex";
+            modal1.style.display = "none";
+            backArrowModal.style.visibility = "visible";
+        } else {
+            modal2.style.display = "none";
+            modal1.style.display = "flex";
+            backArrowModal.style.visibility = "hidden";
+        }
+    }
+
+    // AJOUTER UNE IMAGE DANS LA MODALE 2 //
+
+    const addNewImage = document.getElementById("searchButton");
+    const addImageOverview = document.getElementById("imageOverview");
+    const addCategoryImage = document.getElementById("category");
+    const addTitleImage = document.getElementById("imageTitle");
+    const validationButton = document.getElementById("validateButton");
+
+    // Selectionner l'image //
+    addNewImage.addEventListener("change", function () {
+        const selectFile = addNewImage.files[0];
+        if (selectFile) {
+            const imgUrl = URL.createObjectURL(selectFile);
+            const img = document.createElement("img");
+            img.src = imgUrl;
+            addImageOverview.innerHTML = "";
+            addImageOverview.appendChild(img);
+
+            // Supprime les autres éléments pour garder que l'image //
+            const sendPhotoModal = document.getElementsByClassName("sendPhoto");
+            Array.from(sendPhotoModal).forEach(e => {e.style.display = "none"});
+            updateValidButtonColor();
+        }
+    })
+
+    // CHANGEMENT DE COULEUR DU BOUTON VALIDER //
+    function updateValidButtonColor() {
+        if(addTitleImage.value != "" && addImageOverview.firstChild) {
+            validationButton.style.backgroundColor = "#1D6154";
+        }else{
+            validationButton.style.backgroundColor = "#A7A7A7";
+        }
+    };
+    addTitleImage.addEventListener("input", updateValidButtonColor)
+
+    // RÉINITIALISER L'ENVOI D'IMAGE QUAND ON QUITTE LA MODALE //
+    function resetImage() {
+        addTitleImage.value = "";
+        const sendPhoto = document.getElementsByClassName("sendPhoto");
+        const img = addImageOverview.querySelector("img");
+        Array.from(sendPhoto).forEach(e => {e.style.display = "block"});
+        if(img) {addImageOverview.removeChild(img)}
+        const addImageError = document.getElementById("errorImage");
+        addImageError.style.display = "none";
+    }
+
+    validationButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        const addImageError = document.getElementById("errorImage");
+        addImageError.style.display = "flex";
+        addImageError.style.color = "red";
+
+        // Si le champ du titre est vide //
+        if (addTitleImage.value === "") {
+            addImageError.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Titre manquant`;
+            return;
+        }
+
+        // Si le champ image est vide //
+        if (!addImageOverview.firstChild) {
+            addImageError.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Image manquante`;
+            return;
+        }
+
+        // Si la taille de l'image est autorisée à 4mo //
+        const maximumSize = 4 * 1024 * 1024;
+        const selectFile = addNewImage.files[0];
+        if (selectFile.size > maximumSize) {
+            addImageError.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Taille image supérieur à 4Mo`;
+            return;
+        }
+        updateValidButtonColor();
+
+
+        // ETAPE 3.3 : ENVOI D'UN NOUVEAU PROJET AU BACK-END VIA LE FORMULAIRE DE LA MODALE //
+        // FormData pour envoyer les données de la nouvelle image //
+
+        const formData = new FormData();
+        formData.append("image", addNewImage.files[0]);
+        formData.append("title", addTitleImage.value);
+        formData.append("category", addCategoryImage.value);
+
+        fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {"Authorization": `Bearer ${token}`},
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erreur de la requête");
+                }
+            })
+            .then(data => {
+                const addImageSuccess = document.getElementById("errorImage");
+                addImageSuccess.innerHTML = `<i class="fa-solid fa-circle-check"></i> Image ajoutée avec succès !`;
+                addImageSuccess.style.color = "green";
+                /*dynamicCard();*/
+            })
+            .catch(error => {
+                console.error("Erreur", error);
+                addImageError.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Erreur lors de l'ajout de l'image`;
+            })
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // ******************** //
 
 
-    // MODALE 2 //
+
+
+
+
+
+
 
 
 
