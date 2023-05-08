@@ -5,9 +5,6 @@
 // Fonction pour recuperer les travaux provenant du back-end //
 
 async function fetchWorks(categoryId) {
-    console.log("**********************")
-    console.log(categoryId)
-    console.log("**********************")
     const response = await fetch('http://localhost:5678/api/works');
     let works = await response.json();
     let filteredWorks = []
@@ -20,10 +17,10 @@ async function fetchWorks(categoryId) {
             }
         }
     }
-    console.log(filteredWorks)
     createGallery(filteredWorks);
     createModalWorks(filteredWorks)
 }
+
 // Fonction pour ajouter dans la galerie les travaux recuperes //
 function createGallery(works) {
     // Creation de la galerie //
@@ -46,10 +43,7 @@ function createGallery(works) {
 fetchWorks(0);
 
 
-
 // ETAPE 1.2 : REALISATION DU FILTRE DES TRAVAUX //
-
-
 
 async function fetchCategories() {
     const response = await fetch('http://localhost:5678/api/categories');
@@ -270,6 +264,7 @@ if (token) {
             moveArrowIcon.classList.add("fa-solid", "fa-arrows-up-down-left-right", "iconModal", "arrow");
             let figcaptionElement = document.createElement("figcaption");
             figcaptionElement.innerText = "éditer";
+            figureElement.setAttribute("data-id", works[i].id);
             // Mettre les éléments dans le HTML //
             document.querySelector(".modalGallery").appendChild(figureElement);
             figureElement.appendChild(imageElement);
@@ -333,12 +328,12 @@ if (token) {
 
     // CHANGEMENT DE COULEUR DU BOUTON VALIDER //
     function updateValidButtonColor() {
-        if(addTitleImage.value != "" && addImageOverview.firstChild) {
+        if(addTitleImage.value !== "" && addImageOverview.firstChild) {
             validationButton.style.backgroundColor = "#1D6154";
         }else{
             validationButton.style.backgroundColor = "#A7A7A7";
         }
-    };
+    }
     addTitleImage.addEventListener("input", updateValidButtonColor)
 
     // RÉINITIALISER L'ENVOI D'IMAGE QUAND ON QUITTE LA MODALE //
@@ -380,6 +375,7 @@ if (token) {
         updateValidButtonColor();
 
 
+
         // ETAPE 3.3 : ENVOI D'UN NOUVEAU PROJET AU BACK-END VIA LE FORMULAIRE DE LA MODALE //
         // FormData pour envoyer les données de la nouvelle image //
 
@@ -402,7 +398,6 @@ if (token) {
                 const addImageSuccess = document.getElementById("errorImage");
                 addImageSuccess.innerHTML = `<i class="fa-solid fa-circle-check"></i> Image ajoutée avec succès !`;
                 addImageSuccess.style.color = "green";
-                /*dynamicCard();*/
             })
             .catch(error => {
                 console.error("Erreur", error);
@@ -410,41 +405,53 @@ if (token) {
             })
     });
 
+    // ETAPE 3.4 : TRAITEMENT DE LA RÉPONSE DE L'API POUR AFFICHER DYNAMIQUEMENT LA NOUVELLE IMAGE DE LA MODALE //
+    // Afficher dynamiquement la nouvelle image //
+
+    function dynamicCard() {
+        fetch(`http://localhost:5678/api/works`)
+            .then((response) => {
+                if(response.ok) {
+                    document.querySelector(".gallery").innerHTML = "";
+                    document.querySelector(".modalGallery").innerHTML = "";
+                    fetchWorks();
+                }
+            })
+    }
 
 
 
+    // ETAPE 3.2 : SUPPRESSION DE TRAVAUX EXISTANTS //
 
+    function clickTrash() {
+        const gallery = document.querySelector(".modalGallery");
+        gallery.addEventListener("click", (e) => {
+            if (e.target.classList.contains("fa-trash")) {
+                const figure = e.target.closest("figure");
+                const dataId = figure.getAttribute("data-id");
+                deleteImage(dataId);
+                figure.remove();
+            }
+        })
+    }
 
+    function deleteImage(id) {
+        fetch(`http://localhost:5678/api/works/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+            .then(response => {
+                if (response.ok) {
+                    dynamicCard();
+                } else {
+                    alert("Erreur lors de la suppression de l'image");
+                }
+            })
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    clickTrash()
 
     // ******************** //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 } else {
 

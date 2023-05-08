@@ -179,6 +179,7 @@ i {
     background-color: white;
     width: 560px;
     height: auto;
+    max-height: 700px;
     padding: 32px;
     border-radius: 10px;
     animation: slide .3s both;
