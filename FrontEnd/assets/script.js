@@ -4,22 +4,29 @@
 
 // Fonction pour recuperer les travaux provenant du back-end //
 
-async function fetchWorks(categoryId) {
-    const response = await fetch('http://localhost:5678/api/works');
-    let works = await response.json();
-    let filteredWorks = []
-    if (parseInt(categoryId) === 0) {
-        filteredWorks = works
-    } else {
-        for (let i = 0; i < works.length; i++) {
-            if (works [i].categoryId === parseInt(categoryId)) {
-                filteredWorks.push(works [i])
+function fetchWorks(categoryId) {
+    fetch('http://localhost:5678/api/works')
+        .then((res) =>
+        res.json()
+    ).then(response => {
+        console.log(response)
+        let works = response
+        let filteredWorks = []
+        if (parseInt(categoryId) === 0) {
+            filteredWorks = works
+        } else {
+            for (let i = 0; i < works.length; i++) {
+                if (works [i].categoryId === parseInt(categoryId)) {
+                    filteredWorks.push(works [i])
+                }
             }
         }
-    }
-    createGallery(filteredWorks);
-    createModalWorks(filteredWorks)
+        createGallery(filteredWorks);
+        createModalWorks(filteredWorks)
+    })
 }
+
+fetchWorks(0);
 
 // Fonction pour ajouter dans la galerie les travaux recuperes //
 function createGallery(works) {
@@ -39,8 +46,6 @@ function createGallery(works) {
         figureElement.appendChild(figcaptionElement);
     }
 }
-
-fetchWorks(0);
 
 
 // ETAPE 1.2 : REALISATION DU FILTRE DES TRAVAUX //
@@ -260,11 +265,11 @@ if (token) {
             // icone //
             const trashIcon = document.createElement("i");
             trashIcon.classList.add("fa-solid", "fa-trash", "iconModal", "trash");
+            trashIcon.addEventListener("click", () => removeProject(works[i].id))
             const moveArrowIcon = document.createElement("i");
             moveArrowIcon.classList.add("fa-solid", "fa-arrows-up-down-left-right", "iconModal", "arrow");
             let figcaptionElement = document.createElement("figcaption");
             figcaptionElement.innerText = "éditer";
-            figureElement.setAttribute("data-id", works[i].id);
             // Mettre les éléments dans le HTML //
             document.querySelector(".modalGallery").appendChild(figureElement);
             figureElement.appendChild(imageElement);
@@ -394,10 +399,11 @@ if (token) {
                     throw new Error("Erreur de la requête");
                 }
             })
-            .then(data => {
+            .then(() => {
                 const addImageSuccess = document.getElementById("errorImage");
                 addImageSuccess.innerHTML = `<i class="fa-solid fa-circle-check"></i> Image ajoutée avec succès !`;
                 addImageSuccess.style.color = "green";
+                dynamicWorks()
             })
             .catch(error => {
                 console.error("Erreur", error);
@@ -408,48 +414,34 @@ if (token) {
     // ETAPE 3.4 : TRAITEMENT DE LA RÉPONSE DE L'API POUR AFFICHER DYNAMIQUEMENT LA NOUVELLE IMAGE DE LA MODALE //
     // Afficher dynamiquement la nouvelle image //
 
-    function dynamicCard() {
-        fetch(`http://localhost:5678/api/works`)
+    function dynamicWorks() {
+        fetch("http://localhost:5678/api/works")
             .then((response) => {
                 if(response.ok) {
                     document.querySelector(".gallery").innerHTML = "";
                     document.querySelector(".modalGallery").innerHTML = "";
-                    fetchWorks();
+                    fetchWorks(0);
                 }
             })
     }
 
 
-
     // ETAPE 3.2 : SUPPRESSION DE TRAVAUX EXISTANTS //
 
-    function clickTrash() {
-        const gallery = document.querySelector(".modalGallery");
-        gallery.addEventListener("click", (e) => {
-            if (e.target.classList.contains("fa-trash")) {
-                const figure = e.target.closest("figure");
-                const dataId = figure.getAttribute("data-id");
-                deleteImage(dataId);
-                figure.remove();
-            }
-        })
-    }
-
-    function deleteImage(id) {
+    function removeProject(id) {
         fetch(`http://localhost:5678/api/works/${id}`, {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${token}` }
         })
             .then(response => {
                 if (response.ok) {
-                    dynamicCard();
+                    dynamicWorks();
                 } else {
                     alert("Erreur lors de la suppression de l'image");
                 }
             })
     }
 
-    clickTrash()
 
     // ******************** //
 
