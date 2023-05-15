@@ -9,7 +9,6 @@ function fetchWorks(categoryId) {
         .then((res) =>
         res.json()
     ).then(response => {
-        console.log(response)
         let works = response
         let filteredWorks = []
         if (parseInt(categoryId) === 0) {
@@ -82,7 +81,6 @@ function createMenu(categories) {
         });
 
         fetchWorks(0)
-
     });
 
 
@@ -110,11 +108,6 @@ function createMenu(categories) {
         });
     }
 }
-
-
-        // Affichage des boutons filtres dans le menu //
-
-
 
 
 // ÉTAPE 2 : CODER LA PAGE DE CONNEXION //
