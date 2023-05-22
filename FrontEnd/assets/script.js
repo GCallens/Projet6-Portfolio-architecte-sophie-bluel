@@ -109,6 +109,28 @@ function createMenu(categories) {
     }
 }
 
+// Lien des Boutons Projet et Contact //
+
+// Bouton projets //
+
+const projectHeaderButton = document.querySelector(".projectButton")
+
+const projectButton = document.createElement("a")
+projectButton.href = "index.html"
+projectButton.innerHTML = "projets"
+projectButton.classList.add("projectButton")
+projectHeaderButton.appendChild(projectButton)
+
+// Bouton Contact //
+
+const contactHeaderButton = document.querySelector(".contactButton")
+
+const contactButton = document.createElement("a")
+contactButton.href = "#contact"
+contactButton.innerHTML = "contact"
+contactButton.classList.add("contactButton")
+contactHeaderButton.appendChild(contactButton)
+
 
 // ÉTAPE 2 : CODER LA PAGE DE CONNEXION //
 
@@ -230,6 +252,7 @@ if (token) {
         modal.querySelector(".closeModalIcon").removeEventListener("click", closeModal);
         modal.querySelector(".modal").removeEventListener("click", stopPropagation);
         resetImage();
+        changeModal(false)
     };
 
     // Stopper la propagation //
